@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to ResumeRater</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #f39c12, #8e44ad); /* Gradient from yellow to purple */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background-color: #ffffff; /* White background for content */
+            border-radius: 15px;
+            width: 100%;
+            max-width: 480px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        h1, h2, h3 {
+            font-weight: 600;
+            color: #2c3e50; /* Dark blue for text */
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 20px; }
+
+        button {
+            background-color: #e74c3c; /* Vibrant red button */
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover { background-color: #c0392b; transform: scale(1.05); }
+
+        .upload-container, .results-container { display: none; margin-top: 20px; }
+
+        .upload-input {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px 18px;
+            width: 80%;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            transition: border-color 0.3s ease;
+        }
+
+        .upload-input:focus { border-color: #3498db; outline: none; }
+
+        .upload-container button {
+            background-color: #1abc9c; /* Teal button for uploading */
+            border-radius: 50px;
+            padding: 12px 30px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .upload-container button:hover { background-color: #16a085; }
+
+        .results-list {
+            text-align: left;
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        .results-list li {
+            background-color: #ecf0f1;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .results-list li:hover { background-color: #dfe6e9; }
+
+        .result-item span { font-weight: bold; color: #e74c3c; /* Red text for emphasis */ }
+
+        #score { color: #2980b9; font-size: 2rem; }
+
+        #uploadMessage { color: #e74c3c; font-size: 0.9rem; }
+
+        .back-btn {
+            background-color: #9b59b6; /* Purple button for reset */
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .back-btn:hover { background-color: #8e44ad; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="app-container">
+    <div id="welcome">
+        <h1>Welcome to ResumeRater!</h1>
+        <p>Upload your resume, get your score, and improve it with personalized feedback.</p>
+        <button onclick="showUploadForm()">Start</button>
+    </div>
+
+    <!-- Upload Resume Form -->
+    <div class="upload-container" id="uploadForm">
+        <h2>Upload Your Resume</h2>
+        <input type="file" id="resume" class="upload-input" accept=".pdf,.doc,.docx" required>
+        <br>
+        <button onclick="submitResume()">Upload Resume</button>
+        <p id="uploadMessage"></p>
+    </div>
+
+    <!-- Results -->
+    <div class="results-container" id="results">
+        <h2>Your Resume Rating</h2>
+        <p>Score: <span id="score">85</span>/100</p>
+
+        <h3>Likes:</h3>
+        <ul class="results-list" id="likes"></ul>
+
+        <h3>Dislikes:</h3>
+        <ul class="results-list" id="dislikes"></ul>
+
+        <h3>Suggestions for Improvement:</h3>
+        <ul class="results-list" id="suggestions"></ul>
+
+        <button class="back-btn" onclick="resetApp()">Try Again</button>
+    </div>
+</div>
+
+<script>
+    // Show the resume upload form
+    function showUploadForm() {
+        document.getElementById('welcome').style.display = 'none';
+        document.getElementById('uploadForm').style.display = 'block';
+    }
+
+    // Handle resume form submission
+    function submitResume() {
+        const file = document.getElementById('resume').files[0];
+        const message = document.getElementById('uploadMessage');
+        
+        if (!file) {
+            message.textContent = 'Please select a file to upload.';
+            return;
+        }
+
+        message.textContent = ''; // Clear the message
+
+        // Simulate the process of uploading the resume and getting a rating
+        setTimeout(function() {
+            // Randomize score and feedback for demonstration purposes
+            const randomScore = Math.floor(Math.random() * 40) + 60; // Generate a score between 60 and 100
+            const result = {
+                score: randomScore,
+                likes: ['Well-organized layout', 'Clear objective statement'],
+                dislikes: ['Too much text', 'No quantifiable achievements'],
+                suggestions: ['Use bullet points for skills', 'Add more metrics in experience section']
+            };
+
+            // Hide the upload form and show the results
+            document.getElementById('uploadForm').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+
+            // Update results dynamically
+            document.getElementById('score').textContent = result.score;
+            displayList('likes', result.likes);
+            displayList('dislikes', result.dislikes);
+            displayList('suggestions', result.suggestions);
+        }, 2000);
+    }
+
+    // Display the list of likes, dislikes, or suggestions
+    function displayList(elementId, items) {
+        const listElement = document.getElementById(elementId);
+        listElement.innerHTML = ''; // Clear existing list
+
+        items.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            listElement.appendChild(li);
+        });
+    }
+
+    // Reset the app to try again
+    function resetApp() {
+        document.getElementById('results').style.display = 'none';
+        document.getElementById('welcome').style.display = 'block';
+        document.getElementById('uploadForm').style.display = 'none';
+        document.getElementById('uploadMessage').textContent = '';
+    }
+</script>
+
+</body>
+</html>
